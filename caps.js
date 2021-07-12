@@ -2,28 +2,33 @@
 console.log('hello from caps');
 
 const event = require('./events');
+const faker = require('faker');
+require('dotenv').config();
+require('./driver');
+require('./vendor');
 
-event.on('pick', (package1) => {
-  console.log(`hello vendor, this package ${package1} is picked up`);
-  event.emit('deliver', package1);
-});
+//commented setinterval to prevent the infinte loop when testing.
 
-event.on('deliver', (package1) => {
-  console.log(`hello driver, this ${package1} will be delivered`);
-  event.emit('transit', package1);
-});
+// let counter = 0;
+// setInterval(function () {
+//   let payload = {
+//     store: process.env.STORE_NAME,
+//     orderID: faker.datatype.uuid(),
+//     customer: faker.name.findName(),
+//     address: faker.address.streetAddress(),
+//   };
+//   event.emit('pick', payload);
+//   console.log('counter', counter++);
+// }, 5000);
 
-event.on('transit', (package1) => {
-  console.log(`hello system, i'm the driver and this ${package1} in the way`);
-  event.emit('delivered', package1);
-});
-
-event.on('delivered', (package1) => {
-  console.log(
-    `hello system, i'm the driver and this ${package1} is delivered successfully.`
-  );
-  console.log(
-    `hello vendor, i'm the driver and this ${package1} is delivered successfully.`
-  );
-});
-event.emit('pick', 'test Package');
+function testingFunction() {
+  let payload = {
+    store: process.env.STORE_NAME,
+    orderID: faker.datatype.uuid(),
+    customer: faker.name.findName(),
+    address: faker.address.streetAddress(),
+  };
+  event.emit('pick', payload);
+}
+testingFunction();
+module.exports = testingFunction;
