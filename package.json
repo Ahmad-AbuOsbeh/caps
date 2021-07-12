@@ -4,7 +4,7 @@
   "description": "",
   "main": "caps.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage --verbose"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/Ahmad-AbuOsbeh/caps/issues"
   },
-  "homepage": "https://github.com/Ahmad-AbuOsbeh/caps#readme"
+  "homepage": "https://github.com/Ahmad-AbuOsbeh/caps#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "faker": "^5.5.3",
+    "jest": "^27.0.6"
+  }
 }
