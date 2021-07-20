@@ -1,15 +1,47 @@
-const caps = require('../caps');
+require('../caps');
+require('../driver');
+require('../vendor');
+
+const event = require('../events.js');
+var faker = require('faker');
+require('dotenv').config();
 
 describe('caps tests', () => {
-  test('tets pick up  ', async () => {
-    await expect(caps()).toEqual(
-      'Thank you for delivering ORDER_ID : e75460ee-122d-4db9-93a3-c85af3e11b43'
-    );
+  let consoleSpy;
+  let payload = {
+    store: process.env.STORE_NAME,
+    orderID: faker.datatype.uuid(),
+    customer: faker.name.findName(),
+    address: faker.address.streetAddress(),
+  };
+
+  beforeEach(() => {
+    consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+  });
+  afterEach(() => {
+    consoleSpy.mockRestore();
   });
 
-  test('tets deliver  ', async () => {
-    await expect(caps()).toEqual(
-      '"DRIVER: picked up ORDER_ID : 1b779a59-8d9d-4c26-a72d-4c57eac32cd1 "'
-    );
+  test('tet pick up  ', async () => {
+    event.emit('pick', payload);
+    await expect(consoleSpy).toHaveBeenCalled();
+  });
+
+  test('tet deliver  ', async () => {
+    event.emit('deliver', payload);
+
+    await expect(consoleSpy).toHaveBeenCalled();
+  });
+
+  test('tet transit  ', async () => {
+    event.emit('transit', payload);
+
+    await expect(consoleSpy).toHaveBeenCalled();
+  });
+
+  test('tet delivered  ', async () => {
+    event.emit('delivered', payload);
+
+    await expect(consoleSpy).toHaveBeenCalled();
   });
 });
